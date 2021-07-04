@@ -13,15 +13,16 @@ LIMITPRICE=os.getenv("LIMITPRICE")
 BOT=os.getenv("BOT")
 CHANNEL=os.getenv("CHANNEL")
 
-
+a=0
 while(True):
     cg = CoinGeckoAPI()
     data=cg.get_price(ids=COINTICKET, vs_currencies=VS_CURRENCIE)
     price=data[COINTICKET][VS_CURRENCIE]
     if float(price)<float(LIMITPRICE):
-        print("alert")
-        response = requests.get('https://api.telegram.org/'+BOT+'/sendMessage?chat_id='+CHANNEL+'&text=Price lower than '+ str(LIMITPRICE)+ ' Value '+ str(price) )
-    else:
-        print("Correct")
+        response = requests.get('https://api.telegram.org/'+BOT+'/sendMessage?chat_id='+CHANNEL+'&text=Price '+COINTICKET +' lower than '+ str(LIMITPRICE)+ ' Value '+ str(price) )
+    a=a+1        
+    if a*(int(TIMESLEEP)/60/60/24)>1:
+        response = requests.get('https://api.telegram.org/'+BOT+'/sendMessage?chat_id='+CHANNEL+'&text=Price  '+COINTICKET +' reminder limit '+ str(LIMITPRICE)+ ' Value '+ str(price) )
+        a=0
     time.sleep(int(TIMESLEEP))
 
